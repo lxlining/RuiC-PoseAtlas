@@ -1,0 +1,10 @@
+_source/
+scripts/
+docs/
+comfyui/
+.git/
+.gitignore
+.assetsignore
+README.md
+LICENSE
+package.json

@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RuiC 换装合成台 · 姿势 + 服装 + 人像</title>
+<meta name="theme-color" content="#0d0f12">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#0d0f12; --card:#161a20; --card2:#1d222a; --line:#2a313c;
+    --txt:#e7ebf0; --dim:#9aa6b2; --accent:#9b7bff; --accent2:#6d5cff;
+    --ok:#46d39a; --warn:#ffcf6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:22px 18px 160px}
+  header h1{margin:0 0 4px;font-size:24px;letter-spacing:.5px}
+  header p{margin:0;color:var(--dim);font-size:13.5px}
+  .flow{margin:14px 0 18px;padding:12px 14px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;font-size:13px;color:var(--dim);line-height:1.7}
+  .flow b{color:var(--txt)}
+  .flow .step{display:inline-block;background:var(--accent2);color:#fff;border-radius:6px;
+    padding:1px 7px;margin-right:6px;font-size:12px}
+  .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .panel__head{padding:12px 14px;border-bottom:1px solid var(--line)}
+  .panel__head h2{margin:0;font-size:15px}
+  .panel__head .sub{color:var(--dim);font-size:12px;margin-top:2px}
+  .panel__tools{display:flex;gap:8px;margin-top:9px}
+  .panel__tools input{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;padding:7px 10px;font-size:13px;outline:none}
+  .panel__tools input:focus{border-color:var(--accent)}
+  .panel__tools select{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;padding:7px 6px;font-size:12.5px;outline:none;cursor:pointer;min-width:0}
+  .panel__tools select:focus{border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:7px;
+    padding:12px;max-height:430px;overflow:auto;align-content:start}
+  .thumb{position:relative;padding:0;border:2px solid transparent;background:var(--card2);
+    border-radius:9px;overflow:hidden;cursor:pointer;aspect-ratio:3/4}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .cap{position:absolute;left:0;right:0;bottom:0;font-size:10px;line-height:1.2;
+    padding:2px 4px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .thumb.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(155,123,255,.35)}
+  .more{display:block;width:100%;padding:9px;border:0;border-top:1px solid var(--line);
+    background:var(--card2);color:var(--dim);cursor:pointer;font-size:13px}
+  .more:hover{color:var(--txt)}
+  .more[hidden]{display:none}
+  .angles{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 12px}
+  .angles button{border:1px solid var(--line);background:var(--card2);color:var(--dim);
+    border-radius:7px;padding:4px 9px;font-size:12px;cursor:pointer}
+  .angles button.on{background:var(--accent2);color:#fff;border-color:transparent}
+  .tray{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+  @media(max-width:900px){.tray{grid-template-columns:1fr}}
+  .slot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:150px}
+  .slot h3{margin:0 0 8px;font-size:13px;color:var(--dim);display:flex;justify-content:space-between}
+  .slot .empty{color:#5d6672;font-size:13px;display:flex;align-items:center;justify-content:center;height:110px;text-align:center}
+  .slot img{width:100%;border-radius:8px;display:block;background:#000}
+  .slot .meta{font-size:12px;color:var(--dim);margin-top:6px;word-break:break-word}
+  .slot .ok{color:var(--ok)}
+  .actions{position:fixed;left:0;right:0;bottom:0;background:rgba(13,15,18,.96);
+    border-top:1px solid var(--line);padding:12px 18px;backdrop-filter:blur(8px)}
+  .actions .inner{max-width:1280px;margin:0 auto;display:flex;gap:14px;align-items:stretch}
+  .actions textarea{flex:1;min-height:64px;resize:vertical;background:var(--card2);color:var(--txt);
+    border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.5;outline:none}
+  .btns{display:flex;flex-direction:column;gap:8px;min-width:230px}
+  .btn{border:0;border-radius:10px;padding:9px 12px;font-size:13px;cursor:pointer;font-weight:600;
+    background:var(--card2);color:var(--txt);border:1px solid var(--line);text-align:left}
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:0}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .hint{color:var(--dim);font-size:11.5px;margin-top:2px}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+  .nav a{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border:1px solid var(--line);
+    border-radius:9px;color:var(--dim);font-size:13px;font-weight:600}
+  .nav a:hover{color:var(--txt);border-color:var(--accent)}
+  .nav a.on{background:var(--txt);color:#111418;border-color:transparent}
+  #qwenModal{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:center;justify-content:center}
+  #qwenModal[hidden]{display:none}
+  #customModal{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:210;display:flex;align-items:center;justify-content:center}
+  #customModal[hidden]{display:none}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;max-width:560px;max-height:92vh;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>RuiC 换装合成台</h1>
+    <p>在同一页里选「姿势 + 服装 + 人像」，自动拼好合成提示词、打包三张参考图，再跳到云端试穿页看效果（免登录）。</p>
+    <nav class="nav" aria-label="切换图集">
+      <a href="./">姿势图鉴</a>
+      <a href="costume.html">衣装图鉴</a>
+      <a href="face.html">人像图鉴</a>
+      <a href="studio.html" class="on">换装合成台</a>
+    </nav>
+  </header>
+
+  <div class="flow">
+    <b>怎么出效果（免登录、纯网页）：</b><br>
+    <span class="step">1</span> 在下面三栏里各选一张（姿势 / 服装 / 人像）。<br>
+    <span class="step">2</span> 点「复制合成提示词」，把提示词 + 三张参考图粘贴进任意 AI 生图工具，先生成<b>基础角色</b>（姿势+脸定好、衣服先随便）。<br>
+    <span class="step">3</span> 点「去 IDM-VTON 试穿」，把第 2 步的角色当人物图、这里选的服装当服装图上传，网页里直接看换装结果。<br>
+    <span class="hint">说明：免费免登录的试穿页（IDM-VTON 等）只接受「人物图 + 服装图」，姿势/脸来自人物图本身，所以分两步最稳。想要一步到位（姿势+服装+脸同时控制）需本地 ComfyUI 或付费 API。</span>
+  </div>
+
+  <div class="tray">
+    <div class="slot" id="slotPose"><h3>已选姿势 <span></span></h3><div class="empty">未选择</div></div>
+    <div class="slot" id="slotCostume"><h3>已选服装 <span></span></h3><div class="empty">未选择</div></div>
+    <div class="slot" id="slotFace"><h3>已选人像 <span></span></h3><div class="empty">未选择</div></div>
+  </div>
+
+  <div class="cols">
+    <section class="panel" id="panelPose">
+      <div class="panel__head">
+        <h2>① 姿势</h2>
+        <div class="sub" id="poseCount">加载中…</div>
+        <div class="panel__tools"><input type="search" placeholder="搜姿势名 / 分类" data-filter="pose" autocomplete="off"></div>
+      <div class="panel__tools">
+        <select id="fPoseSeries"></select>
+        <select id="fPoseCat"></select>
+      </div>
+      </div>
+      <div class="grid" id="gridPose"></div>
+      <div class="angles" id="poseAngles" hidden></div>
+      <button class="more" id="morePose" hidden>加载更多</button>
+    </section>
+
+    <section class="panel" id="panelCostume">
+      <div class="panel__head">
+        <h2>② 服装</h2>
+        <div class="sub" id="costumeCount">加载中…</div>
+        <div class="panel__tools"><input type="search" placeholder="搜编号 / 标签 / 品类" data-filter="costume" autocomplete="off"></div>
+      <div class="panel__tools">
+        <select id="fCostumeCat"></select>
+        <select id="fCostumeGroup"></select>
+        <select id="fCostumeColor"></select>
+      </div>
+      </div>
+      <div class="grid" id="gridCostume"></div>
+      <button class="more" id="moreCostume" hidden>加载更多</button>
+    </section>
+
+    <section class="panel" id="panelFace">
+      <div class="panel__head">
+        <h2>③ 人像（脸）</h2>
+        <div class="sub" id="faceCount">加载中…</div>
+        <div class="panel__tools"><input type="search" placeholder="搜发型 / 编号" data-filter="face" autocomplete="off"></div>
+      <div class="panel__tools">
+        <select id="fFaceSec"></select>
+        <select id="fFaceHair"></select>
+      </div>
+      </div>
+      <div class="grid" id="gridFace"></div>
+      <button class="more" id="moreFace" hidden>加载更多</button>
+    </section>
+  </div>
+
+</div>
+
+<div class="actions">
+  <div class="inner">
+    <textarea id="promptBox" readonly placeholder="选齐三张后，这里会自动生成「合成提示词」…"></textarea>
+    <div class="btns">
+      <button class="btn" id="btnCopy" disabled>📋 复制合成提示词</button>
+      <button class="btn" id="btnDownload" disabled>⬇️ 下载三张参考图</button>
+      <button class="btn" id="btnTryon" disabled>🔁 去 IDM-VTON 试穿（免登录）</button>
+      <button class="btn primary" id="btnQwenAll" disabled>✨ 云端一键生成（姿势+服装+人像）</button>
+      <button class="btn" id="btnComfy" disabled>🖥 本地生成（ComfyUI·免费）</button>
+      <button class="btn" id="btnQwenTry" disabled>✨ 云端试穿（上传自己的照片）</button>
+      <button class="btn" id="btnQwenCustom" disabled>🌐 自定义接口生成（自填地址+Key）</button>
+      <span class="hint" id="qwenHint"></span>
+      <span class="hint">试穿页：huggingface.co/spaces/yisol/IDM-VTON</span>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="personFile" accept="image/*" hidden>
+
+<div id="qwenModal" hidden>
+  <div class="qbox">
+    <h3 style="margin:0 0 10px;font-size:15px" id="qwenTitle">云端结果</h3>
+    <textarea id="qwenPromptEdit" style="width:100%;min-height:110px;resize:vertical;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px;line-height:1.6;outline:none;margin:0 0 10px"></textarea>
+    <img id="qwenImg" style="max-width:100%;border-radius:8px;display:block;background:#000" alt="">
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn primary" id="qwenGo">🚀 开始生成</button>
+      <a class="btn" id="qwenOpen" target="_blank" rel="noopener" style="text-decoration:none;text-align:center;display:none">打开原图（链接 24 小时内有效）</a>
+      <button class="btn" id="qwenClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="customModal" hidden>
+  <div class="qbox" style="max-width:560px">
+    <h3 style="margin:0 0 10px;font-size:15px" id="customTitle">自定义接口生成 —— 填好地址和 Key，点「开始生成」</h3>
+    <label style="display:block;font-size:12px;color:var(--dim);margin:8px 0 3px">接口地址（https，OpenAI 兼容，通常以 /v1 结尾）</label>
+    <input id="cfgUrl" style="width:100%;box-sizing:border-box;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12.5px;outline:none" placeholder="https://api.siliconflow.cn/v1">
+    <label style="display:block;font-size:12px;color:var(--dim);margin:8px 0 3px">API Key</label>
+    <input id="cfgKey" type="password" style="width:100%;box-sizing:border-box;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12.5px;outline:none" placeholder="sk-...">
+    <label style="display:block;font-size:12px;color:var(--dim);margin:8px 0 3px">模型名</label>
+    <input id="cfgModel" style="width:100%;box-sizing:border-box;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12.5px;outline:none" placeholder="生图模型名">
+    <label style="display:block;font-size:12px;color:var(--dim);margin:10px 0 3px">提示词（可改，将附带选中的姿势+服装+人像三张参考图）</label>
+    <textarea id="cfgPrompt" style="width:100%;box-sizing:border-box;min-height:90px;resize:vertical;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px;line-height:1.6;outline:none"></textarea>
+    <p style="font-size:11px;color:var(--dim);margin:10px 0 0;line-height:1.6">Key 只保存在本浏览器（localStorage），不进任何仓库。仅支持 https 公网地址（本机/内网会被代理拒绝）；经本地代理转发；费用按你接口平台自身规则计。</p>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn primary" id="customGo">🚀 开始生成</button>
+      <button class="btn" id="cfgSave">💾 保存配置</button>
+      <button class="btn" id="customClose">关闭</button>
+    </div>
+    <img id="customImg" style="max-width:100%;border-radius:8px;display:none;background:#000;margin-top:12px" alt="">
+  </div>
+</div>
+
+<script>
+(function(){
+  var DATA = {poses:[],costumes:[],faces:[]};
+  var META = {pose:null,costume:null,face:null};
+  var HAIR_ZH = {};
+  var df = {poseSeries:"all",poseCat:"all",costumeCat:"all",costumeGroup:"all",costumeColor:"all",faceSec:"all",faceHair:"all"};
+  var COLOR_ZH = {black:"黑色",white:"白色",ivory:"象牙白",gray:"灰色",grey:"灰色",red:"红色",pink:"粉色",orange:"橙色",yellow:"黄色",green:"绿色",blue:"蓝色",purple:"紫色",brown:"棕色",beige:"米色",gold:"金色",silver:"银色",navy:"藏青",khaki:"卡其",camel:"驼色",wine:"酒红",mint:"薄荷绿",cream:"奶油色",transparant:"透明",transparent:"透明",mono:"黑白"};
+  var sel = {pose:null, poseAngle:null, costume:null, face:null};
+  var filter = {pose:"", costume:"", face:""};
+  var offset = {pose:0, costume:0, face:0};
+  var CHUNK = 150;
+  var ANGLES = {front:"正面",high:"俯视",low:"仰视",side:"侧面",diagonal:"斜侧"};
+
+  function el(id){return document.getElementById(id);}
+
+  // portrait/img 只存在于本地；部署环境回退到原站 full_remote（与 assets/js/face.js 同策略）
+  function isLocalHost(){
+    return ["localhost","127.0.0.1","::1","[::1]"].indexOf(location.hostname)>=0;
+  }
+  function faceFull(f){
+    return (isLocalHost()||!f.full_remote)? f.full : f.full_remote;
+  }
+
+  function fetchJSON(url){
+    return fetch(url, {cache:"no-store"}).then(function(r){return r.json();});
+  }
+
+  function loadAll(){
+    return Promise.all([
+      fetchJSON("data/poses.json").then(function(d){DATA.poses=d.poses||[]; META.pose=d;}),
+      fetchJSON("data/costumes.json").then(function(d){DATA.costumes=d.costumes||[]; META.costume=d;}),
+      fetchJSON("data/faces.json").then(function(d){DATA.faces=d.images||[]; META.face=d; (d.hairs||[]).forEach(function(h){HAIR_ZH[h.key]=(h.names&&h.names.zh)||h.key;});})
+    ]).then(function(){
+      el("poseCount").textContent = DATA.poses.length + " 组（每组 5 视角）";
+      el("costumeCount").textContent = DATA.costumes.length + " 套";
+      el("faceCount").textContent = DATA.faces.length + " 张";
+      initDropdowns();
+      renderPose(); renderCostume(); renderFace();
+    }).catch(function(e){
+      ["poseCount","costumeCount","faceCount"].forEach(function(id){el(id).textContent="加载失败："+e.message;});
+    });
+  }
+
+  // ---- 分类下拉 ----
+  function fill(id, label, items){
+    var s=el(id); s.innerHTML="";
+    var all=document.createElement("option");
+    all.value="all"; all.textContent=label+"：全部";
+    s.appendChild(all);
+    items.forEach(function(it){
+      var opt=document.createElement("option");
+      opt.value=it.key; opt.textContent=it.text;
+      s.appendChild(opt);
+    });
+  }
+  function fillPoseCat(){
+    var m=META.pose; if(!m) return;
+    var keys = (df.poseSeries==="all")
+      ? m.categories.map(function(c){return c.key;})
+      : (m.categoriesBySeries[df.poseSeries]||[]);
+    fill("fPoseCat","分类", keys.map(function(k){return {key:k, text:k};}));
+  }
+  function initDropdowns(){
+    var mp= META.pose, mc=META.costume, mf=META.face;
+    fill("fPoseSeries","系列",(mp.series||[]).map(function(s){
+      return {key:s.key, text:((s.short&&s.short.zh)||s.names.zh)+"（"+s.poseCount+"）"};
+    }));
+    fillPoseCat();
+    fill("fCostumeCat","分类",(mc.categories||[]).map(function(c){
+      return {key:c.key, text:c.names.zh+"（"+c.count+"）"};
+    }));
+    fill("fCostumeGroup","品类",(mc.groups||[]).map(function(g){
+      return {key:g.key, text:g.names.zh+"（"+g.count+"）"};
+    }));
+    fill("fCostumeColor","色系",(mc.colors||[]).map(function(c){
+      return {key:c.key, text:(COLOR_ZH[c.key]||c.key)+"（"+c.count+"）"};
+    }));
+    fill("fFaceSec","分区",(mf.sections||[]).map(function(s){
+      return {key:s.key, text:s.names.zh+"（"+s.count+"）"};
+    }));
+    fill("fFaceHair","发型",(mf.hairs||[]).map(function(h){
+      return {key:h.key, text:h.names.zh+"（"+h.count+"）"};
+    }));
+    [
+      ["fPoseSeries","poseSeries","pose"],["fPoseCat","poseCat","pose"],
+      ["fCostumeCat","costumeCat","costume"],["fCostumeGroup","costumeGroup","costume"],["fCostumeColor","costumeColor","costume"],
+      ["fFaceSec","faceSec","face"],["fFaceHair","faceHair","face"]
+    ].forEach(function(pair){
+      el(pair[0]).onchange=function(){
+        df[pair[1]]=el(pair[0]).value;
+        offset[pair[2]]=0;
+        if(pair[1]==="poseSeries"){ df.poseCat="all"; fillPoseCat(); }
+        if(pair[2]==="pose") renderPose();
+        else if(pair[2]==="costume") renderCostume();
+        else renderFace();
+      };
+    });
+  }
+
+  function matches(type, item){
+    if(type==="pose"){
+      if(df.poseSeries!=="all" && item.series!==df.poseSeries) return false;
+      if(df.poseCat!=="all" && item.category!==df.poseCat) return false;
+    }
+    if(type==="costume"){
+      if(df.costumeCat!=="all" && item.cat!==df.costumeCat) return false;
+      if(df.costumeGroup!=="all" && item.group!==df.costumeGroup) return false;
+      if(df.costumeColor!=="all" && item.color!==df.costumeColor) return false;
+    }
+    if(type==="face"){
+      if(df.faceSec!=="all" && item.sec!==df.faceSec) return false;
+      if(df.faceHair!=="all" && item.hair!==df.faceHair) return false;
+    }
+    var q = filter[type].trim().toLowerCase();
+    if(!q) return true;
+    if(type==="pose"){
+      var n=item.names||{}; var hay=(item.category+" "+(n.zh||"")+" "+(n.en||"")+" "+(n.ja||"")+" "+item.id).toLowerCase();
+      return hay.indexOf(q)>=0;
+    }
+    if(type==="costume"){
+      var hay=(item.id+" "+(item.cat||"")+" "+(item.group||"")+" "+(item.color||"")+" "+((item.tags||[]).join(" "))).toLowerCase();
+      return hay.indexOf(q)>=0;
+    }
+    if(type==="face"){
+      var hay=(item.id+" "+(item.hair||"")+" "+(item.style||"")+" "+(item.sec||"")).toLowerCase();
+      return hay.indexOf(q)>=0;
+    }
+    return true;
+  }
+
+  function renderPose(){
+    var grid=el("gridPose"); var list=DATA.poses.filter(function(i){return matches("pose",i);});
+    if(offset.pose===0) grid.innerHTML="";
+    var slice=list.slice(offset.pose, offset.pose+CHUNK);
+    slice.forEach(function(it){
+      var b=document.createElement("button"); b.className="thumb"; b.type="button";
+      var front=it.variants && it.variants[0]; var thumb=(front&&front.thumb)||"";
+      b.innerHTML='<img loading="lazy" src="'+thumb+'" alt=""><span class="cap">'+(it.names.zh||it.id)+'</span>';
+      b.onclick=function(){ selectPose(it, b); };
+      grid.appendChild(b);
+    });
+    offset.pose += slice.length;
+    el("morePose").hidden = offset.pose>=list.length;
+  }
+
+  function renderCostume(){
+    var grid=el("gridCostume"); var list=DATA.costumes.filter(function(i){return matches("costume",i);});
+    if(offset.costume===0) grid.innerHTML="";
+    var slice=list.slice(offset.costume, offset.costume+CHUNK);
+    slice.forEach(function(it){
+      var b=document.createElement("button"); b.className="thumb"; b.type="button";
+      b.innerHTML='<img loading="lazy" src="'+it.thumb+'" alt=""><span class="cap">'+(it.id||"")+'</span>';
+      b.onclick=function(){ selectItem("costume", it, b); };
+      grid.appendChild(b);
+    });
+    offset.costume += slice.length;
+    el("moreCostume").hidden = offset.costume>=list.length;
+  }
+
+  function renderFace(){
+    var grid=el("gridFace"); var list=DATA.faces.filter(function(i){return matches("face",i);});
+    if(offset.face===0) grid.innerHTML="";
+    var slice=list.slice(offset.face, offset.face+CHUNK);
+    slice.forEach(function(it){
+      var b=document.createElement("button"); b.className="thumb"; b.type="button";
+      b.innerHTML='<img loading="lazy" src="'+it.thumb+'" alt=""><span class="cap">'+(it.hair||"")+' '+(it.id||"")+'</span>';
+      b.onclick=function(){ selectItem("face", it, b); };
+      grid.appendChild(b);
+    });
+    offset.face += slice.length;
+    el("moreFace").hidden = offset.face>=list.length;
+  }
+
+  function clearSel(type){
+    var grid = type==="pose"?el("gridPose"):(type==="costume"?el("gridCostume"):el("gridFace"));
+    Array.prototype.forEach.call(grid.querySelectorAll(".thumb.sel"), function(n){n.classList.remove("sel");});
+  }
+
+  function selectPose(it, btn){
+    clearSel("pose"); btn.classList.add("sel");
+    sel.pose=it; sel.poseAngle = (it.variants&&it.variants[0]&&it.variants[0].angle)||null;
+    renderAngles(it); updateTray(); updateActions();
+  }
+  function selectItem(type, it, btn){
+    clearSel(type); btn.classList.add("sel");
+    sel[type]=it; updateTray(); updateActions();
+  }
+
+  function renderAngles(it){
+    var box=el("poseAngles"); box.innerHTML=""; box.hidden=false;
+    (it.variants||[]).forEach(function(v){
+      var b=document.createElement("button"); b.type="button";
+      b.textContent = ANGLES[v.angle]||v.angle;
+      if(v.angle===sel.poseAngle) b.className="on";
+      b.onclick=function(){
+        sel.poseAngle=v.angle;
+        Array.prototype.forEach.call(box.children,function(c){c.className="";});
+        b.className="on"; updateTray();
+      };
+      box.appendChild(b);
+    });
+  }
+
+  function poseFull(){
+    if(!sel.pose) return null;
+    var v=(sel.pose.variants||[]).filter(function(x){return x.angle===sel.poseAngle;})[0]
+          || sel.pose.variants[0];
+    return v? v.full : null;
+  }
+  function poseThumb(){
+    if(!sel.pose) return null;
+    var v=(sel.pose.variants||[]).filter(function(x){return x.angle===sel.poseAngle;})[0]
+          || sel.pose.variants[0];
+    return v? v.thumb : null;
+  }
+
+  function updateTray(){
+    // pose
+    var sp=el("slotPose");
+    if(sel.pose){
+      var full=poseFull(); var nm=sel.pose.names||{};
+      sp.innerHTML='<h3>已选姿势 <span class="ok">✓</span></h3>'+
+        (full?'<img src="'+full+'" alt="">':'')+
+        '<div class="meta">'+(nm.zh||"")+' / '+(nm.en||"")+'<br>视角：'+(ANGLES[sel.poseAngle]||sel.poseAngle)+' · '+sel.pose.id+'</div>';
+    } else { sp.innerHTML='<h3>已选姿势 <span></span></h3><div class="empty">未选择</div>'; }
+    // costume
+    var sc=el("slotCostume");
+    if(sel.costume){
+      sc.innerHTML='<h3>已选服装 <span class="ok">✓</span></h3>'+
+        '<img src="'+sel.costume.image+'" alt="">'+
+        '<div class="meta">'+sel.costume.id+' · '+(sel.costume.cat||"")+'/'+(sel.costume.group||"")+'/'+(sel.costume.color||"")+
+        '<br>'+((sel.costume.tags||[]).slice(0,8).join("、"))+'</div>';
+    } else { sc.innerHTML='<h3>已选服装 <span></span></h3><div class="empty">未选择</div>'; }
+    // face
+    var sf=el("slotFace");
+    if(sel.face){
+      sf.innerHTML='<h3>已选人像 <span class="ok">✓</span></h3>'+
+        '<img src="'+faceFull(sel.face)+'" alt="">'+
+        '<div class="meta">'+sel.face.id+' · 发型：'+(sel.face.hair||"")+(sel.face.style?(' · '+sel.face.style):'')+'</div>';
+      var im=sf.querySelector('img');
+      im.onerror=function(){
+        if(sel.face.full_remote && im.getAttribute('src')!==sel.face.full_remote) im.src=sel.face.full_remote;
+      };
+    } else { sf.innerHTML='<h3>已选人像 <span></span></h3><div class="empty">未选择</div>'; }
+  }
+
+  function buildPrompt(){
+    var p=sel.pose, c=sel.costume, f=sel.face;
+    var en=[], zh=[];
+    if(p){
+      en.push("Pose: "+(p.names.en||p.names.zh||p.id)+" ("+(ANGLES[sel.poseAngle]||sel.poseAngle)+" view)");
+      zh.push("姿势："+(p.names.zh||p.id)+"（"+(ANGLES[sel.poseAngle]||sel.poseAngle)+"）");
+    }
+    if(f){
+      var fdesc=(f.hair||"")+(f.style?("、"+f.style):"");
+      en.push("Face reference: front-facing, plain background, "+ (f.hair||"")+" hair"+ (f.style?(", "+f.style):"") );
+      zh.push("脸："+ (fdesc||"正面平光人像") +"（固定角色脸）");
+    }
+    if(c){
+      var cdesc=[c.color,c.group].filter(Boolean).join(" ")+" "+(c.tags||[]).slice(0,8).join(", ");
+      en.push("Outfit (garment): "+cdesc.trim());
+      zh.push("服装："+[c.cat,c.group,c.color].filter(Boolean).join("/")+"，"+(c.tags||[]).slice(0,8).join("、"));
+    }
+    var enText="Generate a full-body character image. "+en.join("; ")+". High detail, consistent character, clean composition.";
+    var zhText="请生成一张全身角色图："+zh.join("；")+"。高细节、角色一致、构图干净。";
+    return {en:enText, zh:zhText};
+  }
+
+  function updateActions(){
+    var ready = sel.pose && sel.costume && sel.face;
+    el("btnCopy").disabled=!ready;
+    el("btnDownload").disabled=!ready;
+    el("btnTryon").disabled=!sel.costume; // 试穿只需服装即可（人物图由你提供）
+    el("btnQwenAll").disabled=!ready;
+    el("btnQwenCustom").disabled=!ready;
+    el("btnComfy").disabled=!ready;
+    el("btnQwenTry").disabled=!sel.costume;
+    if(ready){
+      var pr=buildPrompt();
+      el("promptBox").value = pr.zh + "\n\n[EN]\n" + pr.en + "\n\n负面词 / Negative: blurry, extra limbs, deformed hands, watermark, lowres, mutated";
+    } else {
+      el("promptBox").value = "选齐「姿势 + 服装 + 人像」三张后，这里会自动生成合成提示词。";
+    }
+  }
+
+  function download(url, name){
+    if(!url) return false;
+    // 跨域文件（线上的人像原图）a.download 不生效，改为新标签打开
+    if(/^https?:/i.test(url) && url.indexOf(location.origin+"/")!==0){
+      window.open(url,"_blank","noopener");
+      return true;
+    }
+    var a=document.createElement("a"); a.href=url; a.download=name||"";
+    document.body.appendChild(a); a.click(); a.remove();
+    return false;
+  }
+
+  el("btnCopy").onclick=function(){
+    var t=el("promptBox").value;
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){flash("已复制提示词");}); }
+    else { el("promptBox").select(); document.execCommand("copy"); flash("已复制提示词"); }
+  };
+  el("btnDownload").onclick=function(){
+    var openedTab=false;
+    if(sel.pose && poseFull()) openedTab = download(poseFull(), "pose_"+sel.pose.id+"_"+(sel.poseAngle||"front")+".jpg") || openedTab;
+    if(sel.costume) openedTab = download(sel.costume.image, "costume_"+sel.costume.id+".webp") || openedTab;
+    if(sel.face) openedTab = download(faceFull(sel.face), "face_"+sel.face.id+".png") || openedTab;
+    flash(openedTab ? "参考图已处理：跨域原图在新标签打开，可右键另存" : "已下载三张参考图");
+  };
+  el("btnTryon").onclick=function(){
+    window.open("https://huggingface.co/spaces/yisol/IDM-VTON","_blank","noopener");
+    if(sel.costume) download(sel.costume.image, "costume_"+sel.costume.id+".webp");
+    flash("已打开试穿页并下载服装图");
+  };
+
+  // ---- Qwen 云端试穿 / 生图（走本地代理 8124） ----
+  var QWEN_PROXY="http://127.0.0.1:8124";
+  var FIXED_NEG="lowres, bad anatomy, extra limbs, deformed hands, watermark, mutated, blurry, oversaturated";
+  function getCustomAPI(){
+    try{ return JSON.parse(localStorage.getItem("ruic-studio-api")||"null") || null; }
+    catch(e){ return null; }
+  }
+  function updateApiHint(){
+    el("qwenHint").textContent = "✨=内置 Qwen · 🌐=自定义接口 · 🖥=本地免费 · 云端生成消耗对应平台额度";
+  }
+  updateApiHint();
+
+  function fileToDataURL(file, cb, errCb){
+    var r=new FileReader();
+    r.onload=function(){
+      var du=r.result;
+      if(typeof du!=="string" || du.indexOf("data:image/")!==0){
+        if(errCb) errCb();
+        return;
+      }
+      cb(du);
+    };
+    r.readAsDataURL(file);
+  }
+  function costumeToDataURL(cb){
+    fetch(sel.costume.image).then(function(r){return r.blob();}).then(function(b){
+      var r=new FileReader();
+      r.onload=function(){ cb(r.result); };
+      r.readAsDataURL(b);
+    });
+  }
+  function qwenPrompt(mode){
+    var c=sel.costume;
+    var desc=[c.color,c.group].filter(Boolean).join(" ")+" "+(c.tags||[]).slice(0,10).join(", ");
+    if(mode==="local"){
+      return buildPrompt().en;
+    }
+    if(mode==="compose"){
+      var p=sel.pose, f=sel.face;
+      var poseTxt=p?("第一张图：姿势参考，"+((p.names&&p.names.zh)||p.id)+"（"+(ANGLES[sel.poseAngle]||sel.poseAngle)+"视角）"):"";
+      var faceTxt=f?("第三张图：面部参考，"+(HAIR_ZH[f.hair]||f.hair||"")+"发型"+(f.style?("，细节："+f.style):"")):"";
+      return "参考三张图片生成一张全身角色图：人物按照第一张图的姿势和构图摆放，穿着第二张图中的服装（款式、颜色、材质、细节与之一致），面部与发型与第三张图保持一致。"
+        +(poseTxt?"其中"+poseTxt+"；":"")
+        +(faceTxt?"其中"+faceTxt+"；":"")
+        +"服装细节："+desc+"。姿势、服装、面部三者都要与对应参考图相符，全身可见，干净简洁的纯色背景，高清写实商业摄影。";
+    }
+    if(mode==="try"){
+      return "把第二张图片中的服装完整穿到第一张图的人物身上：保留人物的姿势、面部特征、发型和体型，服装的款式、颜色、材质和细节与第二张图保持一致。全身可见，干净简洁的纯色背景，高清写实商业摄影。";
+    }
+    return "一位模特穿着以下服装的全身展示照："+desc+"。全身可见，姿态自然，干净纯色背景，时尚商业摄影，高清细节。";
+  }
+  function blobToDataURL(b){
+    return new Promise(function(res){
+      var r=new FileReader();
+      r.onload=function(){ res(r.result); };
+      r.readAsDataURL(b);
+    });
+  }
+  function mimeFromURL(url){
+    if(/\.jpe?g(\?|#|$)/i.test(url)) return "image/jpeg";
+    if(/\.png(\?|#|$)/i.test(url)) return "image/png";
+    if(/\.webp(\?|#|$)/i.test(url)) return "image/webp";
+    if(/\.bmp(\?|#|$)/i.test(url)) return "image/bmp";
+    if(/\.gif(\?|#|$)/i.test(url)) return "image/gif";
+    return null;
+  }
+  function urlToDataURL(url){
+    var mime=mimeFromURL(url);
+    return fetch(url).then(function(r){
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      return r.blob().then(blobToDataURL);
+    }).then(function(du){
+      // 部分静态服务器对 .webp 等扩展名会发 application/octet-stream，按扩展名修正标签
+      if(du.indexOf("data:image/")===0) return du;
+      if(mime && du.indexOf("data:")===0 && du.indexOf("base64,")>0){
+        return "data:"+mime+";base64,"+du.slice(du.indexOf("base64,")+7);
+      }
+      throw new Error("响应不是图片内容");
+    });
+  }
+  function faceDataURL(){
+    // 依次尝试：本地原图 → 原站直连（该站允许跨域）→ 本地代理中转（兜底）
+    return urlToDataURL(faceFull(sel.face))
+      .catch(function(){ return urlToDataURL(sel.face.full_remote); })
+      .catch(function(){
+        return fetch(QWEN_PROXY+"/relay-image",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({url:sel.face.full_remote})
+        }).then(function(r){return r.json();}).then(function(o){
+          if(o.error) throw o.error;
+          return o.data;
+        });
+      });
+  }
+  var qwenPending=null;
+  function openQwenEditor(pending, prompt){
+    var images=pending.images;
+    for(var i=0;i<images.length;i++){
+      if(typeof images[i]!=="string" || images[i].indexOf("data:image/")!==0){
+        el("qwenTitle").textContent="失败：第"+(i+1)+"张参考图格式异常（仅支持 JPG/PNG/WebP），请换一张或重选";
+        return;
+      }
+    }
+    qwenPending=pending;
+    el("qwenPromptEdit").value=prompt;
+    el("qwenTitle").textContent = pending.mode==="local"
+      ? "本地 ComfyUI 生成（免费 · 首次较慢）—— 可改提示词"
+      : "检查提示词，改完点「开始生成」";
+    el("qwenGo").disabled=false;
+    el("qwenImg").removeAttribute("src");
+    el("qwenOpen").style.display="none";
+    el("qwenModal").hidden=false;
+  }
+  el("btnQwenTry").onclick=function(){
+    if(!sel.costume) return;
+    var inp=el("personFile");
+    inp.onchange=function(){
+      var f=inp.files[0];
+      if(!f) return;
+      fileToDataURL(f,function(person){
+        costumeToDataURL(function(garment){
+          openQwenEditor({mode:"cloud", images:[person,garment]}, qwenPrompt("try"));
+        });
+      },function(){
+        el("qwenTitle").textContent="失败：这张照片格式不支持（可能是 HEIC），请转成 JPG/PNG 再上传";
+        el("qwenModal").hidden=false;
+      });
+      inp.value="";
+    };
+    inp.click();
+  };
+  el("btnQwenAll").onclick=function(){
+    if(!(sel.pose&&sel.costume&&sel.face)) return;
+    el("qwenTitle").textContent="准备参考图…";
+    el("qwenModal").hidden=false;
+    el("qwenImg").removeAttribute("src");
+    Promise.all([
+      urlToDataURL(poseFull()),
+      urlToDataURL(sel.costume.image),
+      faceDataURL()
+    ]).then(function(imgs){
+      openQwenEditor({mode:"cloud", images: imgs}, qwenPrompt("compose"));
+    }).catch(function(e){
+      el("qwenTitle").textContent="参考图准备失败："+e;
+    });
+  };
+  el("btnComfy").onclick=function(){
+    if(!(sel.pose&&sel.costume&&sel.face)) return;
+    el("qwenTitle").textContent="准备参考图…";
+    el("qwenModal").hidden=false;
+    el("qwenImg").removeAttribute("src");
+    Promise.all([
+      urlToDataURL(poseFull()),
+      faceDataURL()
+    ]).then(function(imgs){
+      openQwenEditor({mode:"local", images:imgs}, qwenPrompt("local"));
+    }).catch(function(e){
+      el("qwenTitle").textContent="参考图准备失败："+e;
+    });
+  };
+  el("qwenGo").onclick=function(){
+    if(!qwenPending) return;
+    var prompt=el("qwenPromptEdit").value;
+    var endpoint, body, busy;
+    if(qwenPending.mode==="local"){
+      endpoint=QWEN_PROXY+"/comfy-generate";
+      body={positive:prompt, negative:FIXED_NEG,
+            pose:qwenPending.images[0], face:qwenPending.images[1]};
+      busy="本地生成中…（首次需下载姿势模型，可能 5-10 分钟）";
+    } else {
+      endpoint=QWEN_PROXY+"/tryon";
+      body={prompt:prompt, images:qwenPending.images};
+      busy="Qwen 生成中…（约 20-60 秒，消耗 1 次额度）";
+    }
+    el("qwenGo").disabled=true;
+    el("qwenTitle").textContent=busy;
+    el("qwenImg").removeAttribute("src");
+    fetch(endpoint,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(out){
+      if(out.error){ el("qwenTitle").textContent="失败："+out.error; }
+      else{
+        el("qwenTitle").textContent= qwenPending.mode==="local" ? "本地结果" : "云端结果";
+        el("qwenImg").src=out.urls[0];
+        el("qwenOpen").href=out.urls[0];
+        el("qwenOpen").style.display = qwenPending.mode==="local" ? "none" : "";
+      }
+      el("qwenGo").disabled=false;
+    }).catch(function(e){
+      el("qwenTitle").textContent="失败："+e;
+      el("qwenGo").disabled=false;
+    });
+  };
+  // ---- 🌐 自定义接口生成（自填地址 + Key，独立面板） ----
+  var qwenCustomImages=null;
+  el("btnQwenCustom").onclick=function(){
+    if(!(sel.pose&&sel.costume&&sel.face)) return;
+    var api=getCustomAPI()||{url:"",key:"",model:""};
+    el("cfgUrl").value=api.url||"";
+    el("cfgKey").value=api.key||"";
+    el("cfgModel").value=api.model||"";
+    el("cfgPrompt").value=qwenPrompt("compose");
+    el("customTitle").textContent="自定义接口生成 —— 参考图准备中…";
+    el("customGo").disabled=true;
+    el("customImg").style.display="none";
+    el("customModal").hidden=false;
+    Promise.all([
+      urlToDataURL(poseFull()),
+      urlToDataURL(sel.costume.image),
+      faceDataURL()
+    ]).then(function(imgs){
+      qwenCustomImages=imgs;
+      el("customGo").disabled=false;
+      el("customTitle").textContent="自定义接口生成 —— 参考图就绪（3 张），点「开始生成」";
+    }).catch(function(e){
+      el("customTitle").textContent="参考图准备失败："+e;
+    });
+  };
+  el("customGo").onclick=function(){
+    if(!qwenCustomImages) return;
+    var base_url=el("cfgUrl").value.trim(), key=el("cfgKey").value.trim(), model=el("cfgModel").value.trim();
+    if(!base_url||!key||!model){ el("customTitle").textContent="接口地址 / Key / 模型名都要填"; return; }
+    localStorage.setItem("ruic-studio-api", JSON.stringify({url:base_url,key:key,model:model}));
+    el("customGo").disabled=true;
+    el("customTitle").textContent="自定义接口生成中…（耗时取决于你的接口）";
+    el("customImg").style.display="none";
+    fetch(QWEN_PROXY+"/generate",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({base_url:base_url,key:key,model:model,prompt:el("cfgPrompt").value,images:qwenCustomImages})
+    }).then(function(r){return r.json();}).then(function(out){
+      if(out.error){ el("customTitle").textContent="失败："+out.error; }
+      else{
+        el("customTitle").textContent="生成结果";
+        el("customImg").src=out.urls[0];
+        el("customImg").style.display="block";
+      }
+      el("customGo").disabled=false;
+    }).catch(function(e){
+      el("customTitle").textContent="失败："+e;
+      el("customGo").disabled=false;
+    });
+  };
+  el("cfgSave").onclick=function(){
+    var api={url:el("cfgUrl").value.trim(), key:el("cfgKey").value.trim(), model:el("cfgModel").value.trim()};
+    if(!api.url||!api.key||!api.model){ flash("接口地址 / Key / 模型名都要填"); return; }
+    localStorage.setItem("ruic-studio-api", JSON.stringify(api));
+    flash("配置已保存到本浏览器");
+  };
+  el("customClose").onclick=function(){ el("customModal").hidden=true; };
+  el("customModal").addEventListener("click",function(e){
+    if(e.target===el("customModal")) el("customModal").hidden=true;
+  });
+  el("qwenClose").onclick=function(){ el("qwenModal").hidden=true; };
+  el("qwenModal").addEventListener("click",function(e){
+    if(e.target===el("qwenModal")) el("qwenModal").hidden=true; // 点遮罩关闭
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape" && !el("qwenModal").hidden) el("qwenModal").hidden=true;
+  });
+
+  var flashTimer;
+  function flash(msg){
+    var n=document.createElement("div");
+    n.textContent=msg; n.style.cssText="position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#46d39a;color:#06281c;padding:8px 14px;border-radius:20px;font-size:13px;z-index:99;box-shadow:0 6px 20px rgba(0,0,0,.4)";
+    document.body.appendChild(n);
+    clearTimeout(flashTimer); flashTimer=setTimeout(function(){n.remove();},1800);
+  }
+
+  // filters + load more
+  Array.prototype.forEach.call(document.querySelectorAll("[data-filter]"), function(inp){
+    inp.addEventListener("input", function(){
+      var t=inp.getAttribute("data-filter"); filter[t]=inp.value;
+      offset[t]=0;
+      if(t==="pose") renderPose(); else if(t==="costume") renderCostume(); else renderFace();
+    });
+  });
+  el("morePose").onclick=renderPose;
+  el("moreCostume").onclick=renderCostume;
+  el("moreFace").onclick=renderFace;
+
+  loadAll();
+})();
+</script>
+</body>
+</html>

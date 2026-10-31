@@ -1,0 +1,933 @@
+{
+  "last_node_id": 16,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        60,
+        40
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "_meta": {
+        "title": "Load Pose (RuiC)"
+      },
+      "widgets_values": [
+        "pose_front.jpg"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "DWPreprocessor",
+      "pos": [
+        360,
+        40
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DWPreprocessor"
+      },
+      "_meta": {
+        "title": "OpenPose (DW)"
+      }
+    },
+    {
+      "id": 3,
+      "type": "ControlNetLoader",
+      "pos": [
+        360,
+        300
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "CONTROL_NET",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ControlNetLoader"
+      },
+      "_meta": {
+        "title": "ControlNet OpenPose (SDXL)"
+      },
+      "widgets_values": [
+        "controlnet-union-sdxl-1.0.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ControlNetApplyAdvanced",
+      "pos": [
+        760,
+        140
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": null
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": null
+        },
+        {
+          "name": "control_net",
+          "type": "CONTROL_NET",
+          "link": null
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "strength",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "start_percent",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "end_percent",
+          "type": "FLOAT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            12
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ControlNetApplyAdvanced"
+      },
+      "_meta": {
+        "title": "Apply Pose ControlNet"
+      }
+    },
+    {
+      "id": 5,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        60,
+        560
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            17,
+            18
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            15
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "_meta": {
+        "title": "Checkpoint (SDXL)"
+      },
+      "widgets_values": [
+        "WAI-Nsfw-Illustrious-17.safetensors"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncodeSDXL",
+      "pos": [
+        420,
+        560
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": null
+        },
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "crop_w",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "crop_h",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "target_width",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "target_height",
+          "type": "INT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXL"
+      },
+      "_meta": {
+        "title": "Positive (SDXL)"
+      },
+      "widgets_values": [
+        "masterpiece, best quality, ultra-detailed, full body,",
+        "<RuiC pose>, <RuiC face ref>, wearing <RuiC costume>, detailed clothing, clean background",
+        768,
+        1024,
+        0,
+        0,
+        768,
+        1024
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncodeSDXL",
+      "pos": [
+        420,
+        820
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": null
+        },
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "crop_w",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "crop_h",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "target_width",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "target_height",
+          "type": "INT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXL"
+      },
+      "_meta": {
+        "title": "Negative (SDXL)"
+      },
+      "widgets_values": [
+        "lowres, bad anatomy, extra limbs, deformed hands, watermark, mutated, blurry, oversaturated",
+        "",
+        768,
+        1024,
+        0,
+        0,
+        768,
+        1024
+      ]
+    },
+    {
+      "id": 8,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        60,
+        320
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP_VISION",
+          "type": "CLIP_VISION",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPVisionLoader"
+      },
+      "_meta": {
+        "title": "CLIP Vision (SDXL)"
+      },
+      "widgets_values": [
+        "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "IPAdapterModelLoader",
+      "pos": [
+        60,
+        440
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IPADAPTER",
+          "type": "IPADAPTER",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "IPAdapterModelLoader"
+      },
+      "_meta": {
+        "title": "IP-Adapter Model (SDXL)"
+      },
+      "widgets_values": [
+        "ip-adapter-plus-face_sdxl_vit-h.safetensors"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "LoadImage",
+      "pos": [
+        60,
+        180
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "_meta": {
+        "title": "Load Face (RuiC)"
+      },
+      "widgets_values": [
+        "face_ref.png"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "IPAdapter",
+      "pos": [
+        460,
+        320
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": null
+        },
+        {
+          "name": "ipadapter",
+          "type": "IPADAPTER",
+          "link": null
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "clip_vision",
+          "type": "CLIP_VISION",
+          "link": null
+        },
+        {
+          "name": "weight",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "noise",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "link": null
+        },
+        {
+          "name": "start_at",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "end_at",
+          "type": "FLOAT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "IPAdapter"
+      },
+      "_meta": {
+        "title": "Apply Face IP-Adapter (SDXL)"
+      }
+    },
+    {
+      "id": 12,
+      "type": "EmptyLatentImage",
+      "pos": [
+        760,
+        460
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "_meta": {
+        "title": "Empty Latent (SDXL/8GB)"
+      },
+      "widgets_values": [
+        768,
+        1024,
+        1
+      ]
+    },
+    {
+      "id": 13,
+      "type": "KSampler",
+      "pos": [
+        1100,
+        280
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": null
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": null
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": null
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "link": null
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "link": null
+        },
+        {
+          "name": "sampler_name",
+          "type": "COMBO",
+          "link": null
+        },
+        {
+          "name": "scheduler",
+          "type": "COMBO",
+          "link": null
+        },
+        {
+          "name": "denoise",
+          "type": "FLOAT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "_meta": {
+        "title": "KSampler (SDXL)"
+      },
+      "widgets_values": [
+        0,
+        30,
+        6.5,
+        "dpmpp_2m",
+        "karras",
+        1.0
+      ]
+    },
+    {
+      "id": 15,
+      "type": "VAEDecode",
+      "pos": [
+        1100,
+        540
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "_meta": {
+        "title": "VAE Decode"
+      }
+    },
+    {
+      "id": 16,
+      "type": "SaveImage",
+      "pos": [
+        1400,
+        540
+      ],
+      "size": [
+        340,
+        140
+      ],
+      "flags": {},
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "_meta": {
+        "title": "Save Image"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      3,
+      "IMAGE"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      2,
+      "CONTROL_NET"
+    ],
+    [
+      4,
+      6,
+      0,
+      4,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      5,
+      7,
+      0,
+      4,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      5,
+      0,
+      11,
+      0,
+      "MODEL"
+    ],
+    [
+      7,
+      9,
+      0,
+      11,
+      1,
+      "IPADAPTER"
+    ],
+    [
+      8,
+      10,
+      0,
+      11,
+      2,
+      "IMAGE"
+    ],
+    [
+      9,
+      8,
+      0,
+      11,
+      3,
+      "CLIP_VISION"
+    ],
+    [
+      10,
+      11,
+      0,
+      13,
+      0,
+      "MODEL"
+    ],
+    [
+      11,
+      4,
+      0,
+      13,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      12,
+      4,
+      1,
+      13,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      13,
+      12,
+      0,
+      13,
+      3,
+      "LATENT"
+    ],
+    [
+      14,
+      13,
+      0,
+      15,
+      0,
+      "LATENT"
+    ],
+    [
+      15,
+      5,
+      2,
+      15,
+      1,
+      "VAE"
+    ],
+    [
+      16,
+      15,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      17,
+      5,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      18,
+      5,
+      1,
+      7,
+      0,
+      "CLIP"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
